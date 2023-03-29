@@ -1,4 +1,4 @@
-# Privacy Preserving Human Rate Limiting in Smart Contracts
+# Privacy Preserving Smart Contract Rate Limiting
 
 Simple contract modifier to add the ability to rate limit humans on any smart contract function call.
 
