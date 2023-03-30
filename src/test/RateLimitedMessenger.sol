@@ -2,6 +2,7 @@
 pragma solidity ^0.8.13;
 
 import { ByteHasher } from "worldcoin/world-id/libraries/ByteHasher.sol";
+import { WorldIDIdentityManager as WorldID } from "worldcoin/world-id/WorldIDIdentityManager.sol";
 import { IWorldID } from "worldcoin/world-id/interfaces/IWorldID.sol";
 import { HumanRateLimiter } from "../HumanRateLimiter.sol";
 
@@ -35,8 +36,9 @@ contract RateLimitedMessenger is HumanRateLimiter {
         pure
         virtual
         override
-        returns (uint256 groupId, uint256 epochLength, uint256 limitPerEpoch)
+        returns (HumanRateLimiter.Settings memory)
     {
-        return (1, 300, 1);
+        return Settings(1, 300, 1);
     }
+
 }

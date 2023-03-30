@@ -2,6 +2,7 @@
 pragma solidity ^0.8.13;
 import { ByteHasher } from "worldcoin/world-id/libraries/ByteHasher.sol";
 import { IWorldID } from "worldcoin/world-id/interfaces/IWorldID.sol";
+import "forge-std/Test.sol";
 
 abstract contract HumanRateLimiter {
     using ByteHasher for bytes;
@@ -25,13 +26,13 @@ abstract contract HumanRateLimiter {
         RateLimitKey calldata rateLimitKey,
         uint256[8] calldata proof
     ) {
-        (uint256 groupId, uint256 epochLength, uint256 limitPerEpoch) = settings();
-        uint256 currentEpoch = block.timestamp / epochLength;
+        Settings memory _settings = settings();
+        uint256 currentEpoch = block.timestamp / _settings.epochLength;
         if (currentEpoch != rateLimitKey.epochId) revert InvalidNullifier();
-        if (rateLimitKey.indexId >= limitPerEpoch) revert InvalidNullifier();
+        if (rateLimitKey.indexId >= _settings.limitPerEpoch) revert InvalidNullifier();
+        console.log("verifying proof");
         worldId.verifyProof(
             root,
-            // groupId, 
             inputHash,
             nullifierHash,
             abi.encodePacked(rateLimitKey.namespace, rateLimitKey.epochId, rateLimitKey.indexId).hashToField(),
@@ -40,5 +41,11 @@ abstract contract HumanRateLimiter {
         _;
     }
 
-    function settings() public virtual returns (uint256 groupId, uint256 epochLength, uint256 limitPerEpoch);
+    function settings() public virtual returns (Settings memory);
+
+    struct Settings {
+        uint256 groupId; 
+        uint256 epochLength;
+        uint256 limitPerEpoch;
+    }
 }

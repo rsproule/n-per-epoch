@@ -29,9 +29,9 @@ is allocated to individual users.
 
 Other use cases:
 
--   faucets: drip assets to Humans but at controlled pace.
--   rewarding user interactions in social networks
--   fair(ish) allocation of scarce resource (nft drop)
+- faucets: drip assets to Humans but at controlled pace.
+- rewarding user interactions in social networks
+- fair(ish) allocation of scarce resource (nft drop)
 
 ---
 
@@ -56,6 +56,6 @@ Check out `Contract.sol` to see this modifier in action.
 
 ## Todo
 
--   [ ] Migrate to foundry. There was some issues with the worldcoin starter code that i didnt want to deal with
--   [ ] small frontend demo?
--   [ ] package this nicely for simple install (`forge install rsproule/this`)
+- [ ] Migrate to foundry. There was some issues with the worldcoin starter code that i didnt want to deal with
+- [ ] small frontend demo?
+- [ ] package this nicely for simple install (`forge install rsproule/this`)

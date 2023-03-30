@@ -2,7 +2,7 @@ import { keccak256, pack } from '@ethersproject/solidity'
 import { ZkIdentity, Strategy } from '@zk-kit/identity'
 import { defaultAbiCoder as abi } from '@ethersproject/abi'
 import { Semaphore, generateMerkleProof } from '@zk-kit/protocols'
-import verificationKey from '../../../lib/world-id-contracts/lib/semaphore/build/snark/verification_key.json' assert { type: 'json' }
+import verificationKey from '../../../lib/world-id-contracts/lib/semaphore/snark-artifacts/20/semaphore.json' assert { type: 'json' }
 
 function hashBytes(signal, type = 'bytes') {
     return BigInt(keccak256([type], [signal])) >> BigInt(8)
@@ -25,7 +25,7 @@ function generateSemaphoreWitness(
     }
 }
 
-async function main(actionId, profileId) {
+async function main(externalNullifier, signal) {
     const identity = new ZkIdentity(Strategy.MESSAGE, 'test-identity')
     const identityCommitment = identity.genIdentityCommitment()
 
@@ -33,14 +33,14 @@ async function main(actionId, profileId) {
         identity.getTrapdoor(),
         identity.getNullifier(),
         generateMerkleProof(20, BigInt(0), [identityCommitment], identityCommitment),
-        hashBytes(actionId, 'string'),
-        pack(['uint256'], [profileId])
+        externalNullifier, 
+        pack(['string'], [signal])
     )
 
     const { proof, publicSignals } = await Semaphore.genProof(
         witness,
-        './lib/world-id-contracts/lib/semaphore/build/snark/semaphore.wasm',
-        './lib/world-id-contracts/lib/semaphore/build/snark/semaphore_final.zkey'
+        './lib/world-id-contracts/lib/semaphore/snark-artifacts/20/semaphore.wasm',
+        './lib/world-id-contracts/lib/semaphore/snark-artifacts/20/semaphore.zkey'
     )
 
     await Semaphore.verifyProof(verificationKey, { proof, publicSignals }).then(isValid => {
@@ -55,4 +55,5 @@ async function main(actionId, profileId) {
     )
 }
 
+console.log(process.argv)
 main(...process.argv.splice(2)).then(() => process.exit(0))
