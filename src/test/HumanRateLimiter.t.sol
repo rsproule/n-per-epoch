@@ -15,26 +15,11 @@ contract SendMessageTest is WorldIDIdentityManagerTest {
     using TypeConverter for uint256;
 
     RateLimitedMessenger public messengerContract;
-    WorldIDIdentityManager public worldId;
 
     function setUp() public override {
         super.setUp();
-        vm.warp(1641070800);
-        WorldIDIdentityManagerImplV1 worldIdImpl = new WorldIDIdentityManagerImplV1();
-        bytes memory callData = abi.encodeCall(
-        WorldIDIdentityManagerImplV1.initialize,
-            (
-                treeDepth,
-                initialRoot,
-                defaultInsertVerifiers,
-                defaultUpdateVerifiers,
-                semaphoreVerifier,
-                isStateBridgeEnabled,
-                stateBridge
-            )
-        );
-        worldId = new WorldIDIdentityManager(address(worldIdImpl), callData);
-        messengerContract = new RateLimitedMessenger(IWorldID(worldIdImpl));
+        // vm.warp(1641070800);
+        messengerContract = new RateLimitedMessenger(IWorldID(managerImpl));
     }
 
     function testGetSettings() public {
@@ -50,7 +35,6 @@ contract SendMessageTest is WorldIDIdentityManagerTest {
         HumanRateLimiter.Settings memory settings = messengerContract.settings();
         HumanRateLimiter.RateLimitKey memory rateLimitKey = _getRateLimitKey(0, settings.epochLength);
         (uint256 nullifierHash, uint256[8] memory proof) = _genProof(rateLimitKey, input);
-        console.log("Proved");
         messengerContract.sendMessage(
             input,
             root,
@@ -69,6 +53,12 @@ contract SendMessageTest is WorldIDIdentityManagerTest {
         return abi.decode(returnData, (uint256));
     }
 
+    function _registerIdentity(uint256 identityCommitment) internal {
+        // this is non-trivial. I think the overall problem here is that I am trying to 
+        // simulate doing full registrations. There is an associated `insertionProof` that 
+        // may or may no be easy for me to figure out how to construct
+    }
+
     function _genProof(
             HumanRateLimiter.RateLimitKey memory rateLimitKey,
             string memory message
@@ -83,7 +73,6 @@ contract SendMessageTest is WorldIDIdentityManagerTest {
         ffiArgs[4] = message;
 
         bytes memory returnData = vm.ffi(ffiArgs);
-        console.log("uherherherh");
         return abi.decode(returnData, (uint256, uint256[8]));
     }
 
@@ -100,7 +89,7 @@ contract SendMessageTest is WorldIDIdentityManagerTest {
     // proxy horrible-ness
     function _getRoot() internal returns (uint256) {
         bytes memory callData = abi.encodeCall(WorldIDIdentityManagerImplV1.latestRoot, ());
-        (, bytes memory returnData) = address(worldId).call(callData);
+        (, bytes memory returnData) = address(identityManager).call(callData);
         (uint256 root) = abi.decode(returnData, (uint256));
         return root;
     }

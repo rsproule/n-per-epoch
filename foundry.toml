@@ -7,7 +7,6 @@ viaIR = true
 
 remappings = [
     'worldcoin/world-id/=lib/world-id-contracts/src/',
-    
     'ds-test/=lib/world-id-contracts/lib/ds-test/src/',
     '@zk-kit/=lib/world-id-contracts/lib/zk-kit/packages/',
     'openzeppelin-contracts/=lib/world-id-contracts/lib/openzeppelin-contracts/contracts/',
