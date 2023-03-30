@@ -25,7 +25,7 @@ function generateSemaphoreWitness(
     }
 }
 
-async function main(externalNullifier, signal) {
+async function main(namespace, epochId, indexId, signal) {
     const identity = new ZkIdentity(Strategy.MESSAGE, 'test-identity')
     const identityCommitment = identity.genIdentityCommitment()
 
@@ -33,7 +33,12 @@ async function main(externalNullifier, signal) {
         identity.getTrapdoor(),
         identity.getNullifier(),
         generateMerkleProof(20, BigInt(0), [identityCommitment], identityCommitment),
-        externalNullifier, 
+        hashBytes(
+            pack(
+                ["string", "uint256", "uint256"],
+                [namespace, epochId, indexId]
+            )
+        ),
         pack(['string'], [signal])
     )
 
@@ -55,5 +60,4 @@ async function main(externalNullifier, signal) {
     )
 }
 
-console.log(process.argv)
 main(...process.argv.splice(2)).then(() => process.exit(0))

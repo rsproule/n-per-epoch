@@ -8,9 +8,11 @@ viaIR = true
 remappings = [
     'worldcoin/world-id/=lib/world-id-contracts/src/',
     'ds-test/=lib/world-id-contracts/lib/ds-test/src/',
-    '@zk-kit/=lib/world-id-contracts/lib/zk-kit/packages/',
     'openzeppelin-contracts/=lib/world-id-contracts/lib/openzeppelin-contracts/contracts/',
     'contracts-upgradeable/=lib/world-id-contracts/lib/openzeppelin-contracts-upgradeable/contracts/',
     'semaphore/=lib/world-id-contracts/lib/semaphore/packages/contracts/contracts/',
+    '@openzeppelin/=lib/world-id-contracts/lib/openzeppelin-contracts/',
+
+    '@zk-kit/=node_modules/@zk-kit',
 ]
 # See more config options https://github.com/foundry-rs/foundry/tree/master/config

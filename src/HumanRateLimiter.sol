@@ -20,8 +20,8 @@ abstract contract HumanRateLimiter {
     }
 
     modifier rateLimit(
-        uint256 inputHash,
         uint256 root,
+        uint256 inputHash,
         uint256 nullifierHash,
         RateLimitKey calldata rateLimitKey,
         uint256[8] calldata proof
@@ -30,7 +30,6 @@ abstract contract HumanRateLimiter {
         uint256 currentEpoch = block.timestamp / _settings.epochLength;
         if (currentEpoch != rateLimitKey.epochId) revert InvalidNullifier();
         if (rateLimitKey.indexId >= _settings.limitPerEpoch) revert InvalidNullifier();
-        console.log("verifying proof");
         worldId.verifyProof(
             root,
             inputHash,

@@ -18,13 +18,19 @@ contract RateLimitedMessenger is HumanRateLimiter {
     constructor(IWorldID _worldId) HumanRateLimiter(_worldId) {}
 
     function sendMessage(
-        string calldata input,
         uint256 root,
+        string calldata input,
         uint256 nullifierHash,
         uint256[8] calldata proof,
         RateLimitKey calldata actionId
     )
-        public rateLimit(abi.encodePacked(input).hashToField(), root, nullifierHash, actionId, proof)
+        public rateLimit(
+            root, 
+            abi.encodePacked(input).hashToField(), 
+            nullifierHash, 
+            actionId, 
+            proof
+        )
     {
         if (nullifierHashes[nullifierHash]) revert InvalidNullifier();
         nullifierHashes[nullifierHash] = true;

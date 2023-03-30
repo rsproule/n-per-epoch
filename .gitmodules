@@ -4,3 +4,6 @@
 [submodule "lib/world-id-contracts"]
 	path = lib/world-id-contracts
 	url = https://github.com/worldcoin/world-id-contracts
+[submodule "lib/zk-kit"]
+	path = lib/zk-kit
+	url = https://github.com/privacy-scaling-explorations/zk-kit
