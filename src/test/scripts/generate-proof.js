@@ -28,17 +28,17 @@ function generateSemaphoreWitness(
 async function main(namespace, epochId, indexId, signal) {
     const identity = new ZkIdentity(Strategy.MESSAGE, 'test-identity')
     const identityCommitment = identity.genIdentityCommitment()
-
+    const externalNullifier = hashBytes(
+        pack(
+            ["string", "uint256", "uint256"],
+            [namespace, epochId, indexId]
+        )
+    );
     const witness = generateSemaphoreWitness(
         identity.getTrapdoor(),
         identity.getNullifier(),
         generateMerkleProof(20, BigInt(0), [identityCommitment], identityCommitment),
-        hashBytes(
-            pack(
-                ["string", "uint256", "uint256"],
-                [namespace, epochId, indexId]
-            )
-        ),
+        externalNullifier,
         pack(['string'], [signal])
     )
 

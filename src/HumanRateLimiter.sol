@@ -34,7 +34,11 @@ abstract contract HumanRateLimiter {
             root,
             inputHash,
             nullifierHash,
-            abi.encodePacked(rateLimitKey.namespace, rateLimitKey.epochId, rateLimitKey.indexId).hashToField(),
+            abi.encodePacked(
+                rateLimitKey.namespace,  
+                rateLimitKey.epochId, 
+                rateLimitKey.indexId
+            ).hashToField(),
             proof
         );
         _;

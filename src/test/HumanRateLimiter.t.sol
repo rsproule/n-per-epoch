@@ -42,14 +42,11 @@ contract SendMessageTest is Test {
         uint256 idCommitment = _genIdentityCommitment();
         mockWID.addMember(idCommitment);
         string memory input = "test message";
-        uint256 root = mockWID.getRoot();
         HumanRateLimiter.Settings memory settings = messengerContract.settings();
         HumanRateLimiter.RateLimitKey memory rateLimitKey = _getRateLimitKey(0, settings.epochLength);
         (uint256 nullifierHash, uint256[8] memory proof) = _genProof(rateLimitKey, input);
-        console.log(root);
-        console.log(input);
         messengerContract.sendMessage(
-            root,
+            mockWID.getRoot(),
             input,
             nullifierHash,
             proof,
@@ -84,7 +81,7 @@ contract SendMessageTest is Test {
     }
 
     function _getRateLimitKey(uint256 index, uint256 epochLength)
-            internal view returns (HumanRateLimiter.RateLimitKey memory rlk) {
+            internal view returns (HumanRateLimiter.RateLimitKey memory) {
         uint256 currentEpoch = block.timestamp / epochLength;
         return HumanRateLimiter.RateLimitKey(
             "send_message",
