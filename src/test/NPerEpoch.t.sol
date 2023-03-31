@@ -6,12 +6,11 @@ import {ExampleNPerEpochContract} from "./ExampleNPerEpochContract.sol";
 import {InteractsWithWorldID} from "./helpers/InteractsWithWorldID.sol";
 import { NPerEpoch } from "../NPerEpoch.sol";
 
-contract ContractTest is Test, InteractsWithWorldID {
+contract NPerEpochTest is Test, InteractsWithWorldID {
     ExampleNPerEpochContract internal messengerContract;
 
     function setUp() public {
         setUpWorldID();
-
         // update any constructor parameters you need here!
         messengerContract = new ExampleNPerEpochContract(worldID);
 
