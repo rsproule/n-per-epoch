@@ -34,23 +34,29 @@ Other use cases:
 - fair(ish) allocation of scarce resource (nft drop)
 
 ---
+
 ## Install / Build / Test
 
-Install 
-```
+Install
+
+``` sh
 git clone git@github.com:rsproule/n-per-epoch.git
 ```
 
 Build
-```
+
+``` sh
 make 
 ```
 
-Run the unit tests: 
-```
+Run the unit tests:
+
+``` sh
 make test
 ```
---- 
+
+---
+
 ## How to use in your contracts (wip)
 
 Check out `Contract.sol` to see this modifier in action.
