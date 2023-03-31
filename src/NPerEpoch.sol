@@ -31,7 +31,7 @@ abstract contract NPerEpoch {
         if (rateLimitKey.indexId >= _settings.limitPerEpoch) revert InvalidNullifier();
         worldId.verifyProof(
             root,
-            1,
+            _settings.groupId,
             inputHash,
             nullifierHash,
             abi.encodePacked(
