@@ -10,13 +10,13 @@ about `address`. This is by design! This means interaction with any of these fun
 ## Human?
 
 This example takes advantage of an existing "anonymity set" which was built by the Worldcoin team. This set has
-approximately 1.4 million _verified_ humans in it. You can opt into using a different set by modifyin the groupId
+approximately 1.4 million _verified_ humans in it. You can opt into using a different set by modifying the groupId
 within the settings.
 
 ## Rate Limiting?
 
 This library gives the contract creator the ability to create limits on the number of times that any given user can
-call the function over a provided epoch. This is flexible users can set the epoch to near infitity if they dont want
+call the function over a provided epoch. This is flexible users can set the epoch to near infinity if they dont want
 the users to get a new set of calls or they can set it super low if they want it to refresh frequently, though because
 proof creating and the settlement on the chain "epochId" needs to match, contract creators should consider proof time and
 the amount of time until the transaction is actually included in a block.
@@ -56,6 +56,8 @@ Check out `Contract.sol` to see this modifier in action.
 
 ## Todo
 
-- [ ] Migrate to foundry. There was some issues with the worldcoin starter code that i didnt want to deal with
+- [x] Migrate to foundry. There was some issues with the worldcoin starter code that i didnt want to deal with
 - [ ] small frontend demo?
 - [ ] package this nicely for simple install (`forge install rsproule/this`)
+- [ ] migrate the scripts to typescript
+- [ ] how to deploy to production (polygon)
