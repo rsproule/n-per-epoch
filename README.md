@@ -4,7 +4,6 @@
 [actions-url]: https://github.com/rsproule/n-per-epoch/actions/workflows/test.yml
 [twitter-badge]: https://img.shields.io/twitter/follow/sproule_
 [twitter-url]: https://twitter.com/sproule_
-[examples]: https://github.com/rsproule/n-per-epoch/tree/main/examples
 [local-example-url]: src/test/ExampleNPerEpochContract.sol
 [worldid-docs]: https://docs.worldcoin.org/
 
@@ -76,49 +75,49 @@ make test
 Check out [`ExampleNPerEpochContract.sol`][local-example-url] to see this modifier in action.
 
 ``` ts
-    import { NPerEpoch} from "../NPerEpoch.sol";
-    ...
-    ...
-    ...
-    constructor(IWorldID _worldId) NPerEpoch(_worldId) {}
+import { NPerEpoch} from "../NPerEpoch.sol";
+// ...
+// ...
+// ...
+constructor(IWorldID _worldId) NPerEpoch(_worldId) {}
 
-    function sendMessage(
-        uint256 root,
-        string calldata input,
-        uint256 nullifierHash,
-        uint256[8] calldata proof,
-        RateLimitKey calldata actionId
+function sendMessage(
+    uint256 root,
+    string calldata input,
+    uint256 nullifierHash,
+    uint256[8] calldata proof,
+    RateLimitKey calldata actionId
+)
+    public rateLimit(
+        root, 
+        abi.encodePacked(input).hashToField(), 
+        nullifierHash, 
+        actionId, 
+        proof
     )
-        public rateLimit(
-            root, 
-            abi.encodePacked(input).hashToField(), 
-            nullifierHash, 
-            actionId, 
-            proof
-        )
-    {
-        if (nullifierHashes[nullifierHash]) revert InvalidNullifier();
-        nullifierHashes[nullifierHash] = true;
-        emit Message(input);
-    }
-    ...
-    ...
-    ...
-    function settings()
-        public
-        pure
-        virtual
-        override
-        returns (NPerEpoch.Settings memory)
-    {
-        return Settings(1, 300, 2);
-    }
+{
+    if (nullifierHashes[nullifierHash]) revert InvalidNullifier();
+    nullifierHashes[nullifierHash] = true;
+    emit Message(input);
+}
+// ...
+// ...
+// ...
+function settings()
+    public
+    pure
+    virtual
+    override
+    returns (NPerEpoch.Settings memory)
+{
+    return Settings(1, 300, 2);
+}
 ```
 
 ## Todo
 
 - [x] Migrate to foundry. There was some issues with the worldcoin starter code that i didnt want to deal with
-- [ ] small frontend demo?
-- [ ] package this nicely for simple install (`forge install rsproule/n-per-epoch`)
-- [ ] migrate the scripts to typescript
+- [x] package this nicely for simple install (`forge install rsproule/n-per-epoch`)
+- [x] migrate the scripts to typescript
 - [ ] how to deploy to production (polygon)
+- [ ] example repo (embedded or separate)
