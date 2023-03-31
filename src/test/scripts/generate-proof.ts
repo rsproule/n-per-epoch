@@ -3,12 +3,6 @@ import { keccak256, pack } from "@ethersproject/solidity";
 import { ZkIdentity, Strategy } from "@zk-kit/identity";
 import { defaultAbiCoder as abi } from "@ethersproject/abi";
 import { Semaphore, generateMerkleProof } from "@zk-kit/protocols";
-const verificationKey = JSON.parse(
-  fs.readFileSync(
-    "./lib/world-id-example-airdrop/lib/semaphore/build/snark/verification_key.json",
-  ).toString()
-);
-
 function hashBytes(signal: string) {
   return BigInt(keccak256(["bytes"], [signal])) >> BigInt(8);
 }
@@ -31,6 +25,13 @@ function generateSemaphoreWitness(
 }
 
 async function main(pathPrefix: string, namespace: string, epochId: string, indexId: string, signal: undefined) {
+	const verificationKey = JSON.parse(
+    fs
+      .readFileSync(
+        pathPrefix + "./lib/world-id-example-airdrop/lib/semaphore/build/snark/verification_key.json"
+      )
+      .toString()
+  );
   const identity = new ZkIdentity(Strategy.MESSAGE, "test-identity");
   const identityCommitment = identity.genIdentityCommitment();
   const externalNullifier = hashBytes(
