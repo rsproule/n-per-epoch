@@ -17,6 +17,10 @@
 
 Simple contract modifier to add the ability to rate limit humans on any smart contract function call.
 
+<p align="center">
+ <img src="assets/logo-n-per-epoch.png">
+</p>
+
 ## Install / Build / Test
 
 Install
@@ -41,9 +45,9 @@ make test
 
 ## Rate Limiting?
 
-This library enables contract creators to set limits on the number of times a specific user can call a function within a defined epoch. The epoch duration is highly flexible, allowing developers to set it to near infinity (1 per forever) or to a very short duration for higher throughput. 
+This library enables contract creators to set limits on the number of times a specific user can call a function within a defined epoch. The epoch duration is highly flexible, allowing developers to set it to near infinity (1 per forever) or to a very short duration for higher throughput.
 > ❗️Warning
-> 
+>
 > Be sure to take into account _proof generation time_ and the _block inclusion time_. The "epochId" must match for both proof and settlement on the chain. So _epochLength_ must be greater than the sum of _proof generation time_ and _block inclusion time_ with some buffer.
 >
 
