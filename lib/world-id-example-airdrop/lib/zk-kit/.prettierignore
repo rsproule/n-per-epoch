@@ -1,0 +1,35 @@
+# dependencies
+node_modules
+package-lock.json
+yarn.lock
+
+# testing
+/coverage
+coverage.json
+
+# docs
+docs
+
+# benchmarks
+benchmarks/results
+
+# hardhat
+cache
+
+# production
+dist
+build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# others
+target
+witness_calculator.js
+zkeyFiles
