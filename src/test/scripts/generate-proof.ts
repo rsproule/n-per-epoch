@@ -30,7 +30,7 @@ function generateSemaphoreWitness(
   };
 }
 
-async function main(namespace: string, epochId: string, indexId: string, signal: undefined) {
+async function main(pathPrefix: string, namespace: string, epochId: string, indexId: string, signal: undefined) {
   const identity = new ZkIdentity(Strategy.MESSAGE, "test-identity");
   const identityCommitment = identity.genIdentityCommitment();
   const externalNullifier = hashBytes(

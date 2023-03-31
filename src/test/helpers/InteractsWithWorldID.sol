@@ -39,8 +39,8 @@ abstract contract InteractsWithWorldID {
 
     function _genIdentityCommitment() internal returns (uint256) {
         string[] memory ffiArgs = new string[](2);
-        ffiArgs[0] = nodePath();
-        ffiArgs[1] = genIdPath();
+        ffiArgs[0] = string.concat(pathPrefix(), "node_modules/ts-node/dist/bin.js");
+        ffiArgs[1] = string.concat(pathPrefix(), "src/test/scripts/generate-commitment.ts");
 
         bytes memory returnData = wldVM.ffi(ffiArgs);
         return abi.decode(returnData, (uint256));
@@ -52,19 +52,18 @@ abstract contract InteractsWithWorldID {
     {
         // increase the lenght of the array if you have multiple parameters as signal
         string[] memory ffiArgs = new string[](7);
-        ffiArgs[0] = nodePath();
-        ffiArgs[1] = proofGenPath();
-        ffiArgs[2] = rateLimitKey.namespace;
-        ffiArgs[3] = rateLimitKey.epochId.toString();
-        ffiArgs[4] = rateLimitKey.indexId.toString();
-        ffiArgs[5] = message;
+        ffiArgs[0] = string.concat(pathPrefix(), "node_modules/ts-node/dist/bin.js");
+        ffiArgs[1] = string.concat(pathPrefix(), "src/test/scripts/generate-proof.ts");
+        ffiArgs[2] = pathPrefix();
+        ffiArgs[3] = rateLimitKey.namespace;
+        ffiArgs[4] = rateLimitKey.epochId.toString();
+        ffiArgs[5] = rateLimitKey.indexId.toString();
+        ffiArgs[6] = message;
 
         bytes memory returnData = wldVM.ffi(ffiArgs);
 
         return abi.decode(returnData, (uint256, uint256[8]));
     }
     
-    function nodePath() public virtual returns (string memory);
-    function proofGenPath() public virtual returns (string memory);
-    function genIdPath() public virtual returns (string memory);
+    function pathPrefix() public virtual returns (string memory);
 }
