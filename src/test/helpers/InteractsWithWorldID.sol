@@ -7,7 +7,7 @@ import {Semaphore} from "worldcoin/world-id/Semaphore.sol";
 import {TypeConverter} from "./TypeConverter.sol";
 import { NPerEpoch } from "../../NPerEpoch.sol";
 
-contract InteractsWithWorldID {
+abstract contract InteractsWithWorldID {
     using TypeConverter for uint256;
     using TypeConverter for address;
 
@@ -39,8 +39,8 @@ contract InteractsWithWorldID {
 
     function _genIdentityCommitment() internal returns (uint256) {
         string[] memory ffiArgs = new string[](2);
-        ffiArgs[0] = "node_modules/ts-node/dist/bin.js";
-        ffiArgs[1] = "src/test/scripts/generate-commitment.ts";
+        ffiArgs[0] = nodePath();
+        ffiArgs[1] = genIdPath();
 
         bytes memory returnData = wldVM.ffi(ffiArgs);
         return abi.decode(returnData, (uint256));
@@ -52,8 +52,8 @@ contract InteractsWithWorldID {
     {
         // increase the lenght of the array if you have multiple parameters as signal
         string[] memory ffiArgs = new string[](7);
-        ffiArgs[0] = 'node_modules/ts-node/dist/bin.js';
-        ffiArgs[1] = 'src/test/scripts/generate-proof.ts';
+        ffiArgs[0] = nodePath();
+        ffiArgs[1] = proofGenPath();
         ffiArgs[2] = rateLimitKey.namespace;
         ffiArgs[3] = rateLimitKey.epochId.toString();
         ffiArgs[4] = rateLimitKey.indexId.toString();
@@ -63,4 +63,8 @@ contract InteractsWithWorldID {
 
         return abi.decode(returnData, (uint256, uint256[8]));
     }
+    
+    function nodePath() public virtual returns (string memory);
+    function proofGenPath() public virtual returns (string memory);
+    function genIdPath() public virtual returns (string memory);
 }

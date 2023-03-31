@@ -9,6 +9,18 @@ import { NPerEpoch } from "../NPerEpoch.sol";
 contract NPerEpochTest is Test, InteractsWithWorldID {
     ExampleNPerEpochContract internal messengerContract;
 
+    function nodePath() public pure override returns (string memory) {
+        return "node_modules/ts-node/dist/bin.js";
+    }
+
+    function proofGenPath() public pure override returns (string memory) {
+        return "src/test/scripts/generate-proof.ts";
+    }
+
+    function genIdPath() public pure override returns (string memory) {
+        return "src/test/scripts/generate-commitment.ts";
+    }
+
     function setUp() public {
         setUpWorldID();
         // update any constructor parameters you need here!
