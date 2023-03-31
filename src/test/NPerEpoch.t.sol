@@ -46,6 +46,24 @@ contract NPerEpochTest is Test, InteractsWithWorldID {
         );
     }
 
+    function testCannotSendWithInvalidNamespace() public {
+        registerIdentity();
+        string memory input = "test message";
+        NPerEpoch.Settings memory settings = messengerContract.settings();
+        NPerEpoch.RateLimitKey memory rateLimitKey = _getRateLimitKey(1, settings.epochLength);
+        rateLimitKey.namespace = "something_else";
+        (uint256 nullifierHash, uint256[8] memory proof) = getProof(rateLimitKey, input);
+        uint256 root = getRoot();
+        vm.expectRevert(NPerEpoch.InvalidNullifier.selector);
+        messengerContract.sendMessage(
+            root,
+            input,
+            nullifierHash,
+            proof,
+            rateLimitKey
+        );
+    }
+
   function testCannotDoubleSendSendMessage() public {
         registerIdentity();
         string memory input = "test message";

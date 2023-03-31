@@ -30,6 +30,7 @@ contract ExampleNPerEpochContract is NPerEpoch {
             proof
         )
     {
+        if (keccak256(abi.encodePacked(actionId.namespace)) != keccak256(abi.encodePacked("send_message"))) revert InvalidNullifier();
         if (nullifierHashes[nullifierHash]) revert InvalidNullifier();
         nullifierHashes[nullifierHash] = true;
         emit Message(input);
