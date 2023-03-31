@@ -28,27 +28,25 @@ function generateSemaphoreWitness(
 		treeSiblings: merkleProof.siblings,
 		externalNullifier: externalNullifier,
 		signalHash: hashBytes(signal),
-	};
+	}
 }
 
-// update the parameters here if changing the signal
-async function main(signalAddress, actionId) {
-	const identity = new ZkIdentity(Strategy.MESSAGE, "test-identity");
-	const identityCommitment = identity.genIdentityCommitment();
-
+async function main(namespace, epochId, indexId, signal) {
+	const identity = new ZkIdentity(Strategy.MESSAGE, 'test-identity')
+	const identityCommitment = identity.genIdentityCommitment()
+	const externalNullifier = hashBytes(
+		pack(
+			["string", "uint256", "uint256"],
+			[namespace, "0x" + epochId, "0x" + indexId]
+		)
+	);
 	const witness = generateSemaphoreWitness(
 		identity.getTrapdoor(),
 		identity.getNullifier(),
-		generateMerkleProof(
-			20,
-			BigInt(0),
-			[identityCommitment],
-			identityCommitment
-		),
-		hashBytes(pack(["string"], [actionId])),
-		// update here if changing the signal (you might need to wrap in a `pack()` call if there are multiple arguments), see above
-		signalAddress
-	);
+		generateMerkleProof(20, BigInt(0), [identityCommitment], identityCommitment),
+		externalNullifier,
+		pack(['string'], [signal])
+	)
 
 	const { proof, publicSignals } = await Semaphore.genProof(
 		witness,
@@ -56,18 +54,16 @@ async function main(signalAddress, actionId) {
 		"./lib/world-id-example-airdrop/lib/semaphore/build/snark/semaphore_final.zkey"
 	);
 
-	await Semaphore.verifyProof(verificationKey, { proof, publicSignals }).then(
-		(isValid) => {
-			if (!isValid) console.error("Generated proof failed to verify");
-		}
-	);
+	await Semaphore.verifyProof(verificationKey, { proof, publicSignals }).then(isValid => {
+		if (!isValid) console.error('Generated proof failed to verify')
+	})
 
 	process.stdout.write(
 		abi.encode(
-			["uint256", "uint256[8]"],
+			['uint256', 'uint256[8]'],
 			[publicSignals.nullifierHash, Semaphore.packToSolidityProof(proof)]
 		)
-	);
+	)
 }
 
-main(...process.argv.splice(2)).then(() => process.exit(0));
+main(...process.argv.splice(2)).then(() => process.exit(0))

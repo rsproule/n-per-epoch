@@ -5,8 +5,10 @@ import {Vm} from "forge-std/Vm.sol";
 import {IWorldID} from "../../interfaces/IWorldID.sol";
 import {Semaphore} from "worldcoin/world-id/Semaphore.sol";
 import {TypeConverter} from "./TypeConverter.sol";
+import { NPerEpoch } from "../../NPerEpoch.sol";
 
 contract InteractsWithWorldID {
+    using TypeConverter for uint256;
     using TypeConverter for address;
 
     Vm public wldVM =
@@ -44,22 +46,19 @@ contract InteractsWithWorldID {
         return abi.decode(returnData, (uint256));
     }
 
-    function getProof(address signal, string memory actionId)
+    function getProof(NPerEpoch.RateLimitKey memory rateLimitKey, string memory message)
         internal
         returns (uint256, uint256[8] memory proof)
     {
         // increase the lenght of the array if you have multiple parameters as signal
-        string[] memory ffiArgs = new string[](5);
-        ffiArgs[0] = "node";
-        ffiArgs[1] = "--no-warnings";
-        ffiArgs[2] = "src/test/scripts/generate-proof.js";
-
-        // duplicate (and update) this line for each parameter on your signal
-        // make sure to update the array index for everything after too!
-        ffiArgs[3] = address(signal).toString();
-
-        // update your external nullifier here
-        ffiArgs[4] = actionId;
+        string[] memory ffiArgs = new string[](7);
+        ffiArgs[0] = 'node';
+        ffiArgs[1] = '--no-warnings';
+        ffiArgs[2] = 'src/test/scripts/generate-proof.js';
+        ffiArgs[3] = rateLimitKey.namespace;
+        ffiArgs[4] = rateLimitKey.epochId.toString();
+        ffiArgs[5] = rateLimitKey.indexId.toString();
+        ffiArgs[6] = message;
 
         bytes memory returnData = wldVM.ffi(ffiArgs);
 
