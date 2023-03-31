@@ -39,7 +39,7 @@ contract InteractsWithWorldID {
 
     function _genIdentityCommitment() internal returns (uint256) {
         string[] memory ffiArgs = new string[](2);
-        ffiArgs[0] = "ts-node";
+        ffiArgs[0] = "node_modules/ts-node/dist/bin.js";
         ffiArgs[1] = "src/test/scripts/generate-commitment.ts";
 
         bytes memory returnData = wldVM.ffi(ffiArgs);
@@ -52,7 +52,7 @@ contract InteractsWithWorldID {
     {
         // increase the lenght of the array if you have multiple parameters as signal
         string[] memory ffiArgs = new string[](7);
-        ffiArgs[0] = 'ts-node';
+        ffiArgs[0] = 'node_modules/ts-node/dist/bin.js';
         ffiArgs[1] = 'src/test/scripts/generate-proof.ts';
         ffiArgs[2] = rateLimitKey.namespace;
         ffiArgs[3] = rateLimitKey.epochId.toString();

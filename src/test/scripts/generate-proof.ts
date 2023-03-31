@@ -6,20 +6,19 @@ import { Semaphore, generateMerkleProof } from "@zk-kit/protocols";
 const verificationKey = JSON.parse(
   fs.readFileSync(
     "./lib/world-id-example-airdrop/lib/semaphore/build/snark/verification_key.json",
-    "UTF8"
-  )
+  ).toString()
 );
 
-function hashBytes(signal) {
+function hashBytes(signal: string) {
   return BigInt(keccak256(["bytes"], [signal])) >> BigInt(8);
 }
 
 function generateSemaphoreWitness(
-  identityTrapdoor,
-  identityNullifier,
-  merkleProof,
-  externalNullifier,
-  signal
+  identityTrapdoor: bigint,
+  identityNullifier: bigint,
+  merkleProof: { root?: any; leaf?: any; siblings: any; pathIndices: any; },
+  externalNullifier: bigint,
+  signal: string
 ) {
   return {
     identityNullifier: identityNullifier,
@@ -31,7 +30,7 @@ function generateSemaphoreWitness(
   };
 }
 
-async function main(namespace, epochId, indexId, signal) {
+async function main(namespace: string, epochId: string, indexId: string, signal: undefined) {
   const identity = new ZkIdentity(Strategy.MESSAGE, "test-identity");
   const identityCommitment = identity.genIdentityCommitment();
   const externalNullifier = hashBytes(

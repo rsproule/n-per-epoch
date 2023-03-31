@@ -57,7 +57,9 @@ async function main() {
   let tx = await wallet.sendTransaction({
     data: hexlify(
       concat([
+        //@ts-ignore
         Contract.bytecode.object,
+        //@ts-ignore
         abi.encode(Contract.abi[0].inputs, [worldIDAddress, ...inputs]),
       ])
     ),
@@ -65,9 +67,12 @@ async function main() {
   });
 
   spinner.text = `Waiting for deploy transaction (tx: ${tx.hash})`;
+  //@ts-ignore
   tx = await tx.wait();
 
+  //@ts-ignore
   spinner.succeed(`Deployed your contract to ${tx.contractAddress}`);
 }
 
+//@ts-ignore
 main(...process.argv.splice(2)).then(() => process.exit(0));
