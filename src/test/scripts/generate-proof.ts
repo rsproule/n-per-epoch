@@ -55,8 +55,8 @@ async function main(pathPrefix: string, namespace: string, epochId: string, inde
 
   const { proof, publicSignals } = await Semaphore.genProof(
     witness,
-    "./lib/world-id-example-airdrop/lib/semaphore/build/snark/semaphore.wasm",
-    "./lib/world-id-example-airdrop/lib/semaphore/build/snark/semaphore_final.zkey"
+    pathPrefix + "./lib/world-id-example-airdrop/lib/semaphore/build/snark/semaphore.wasm",
+    pathPrefix + "./lib/world-id-example-airdrop/lib/semaphore/build/snark/semaphore_final.zkey"
   );
 
   await Semaphore.verifyProof(verificationKey, { proof, publicSignals }).then(
