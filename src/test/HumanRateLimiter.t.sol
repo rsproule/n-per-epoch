@@ -35,7 +35,7 @@ contract SendMessageTest is Test {
         HumanRateLimiter.Settings memory settings = messengerContract.settings();
         assertEq(settings.groupId, 1);
         assertEq(settings.epochLength, 300);
-        assertEq(settings.limitPerEpoch, 1);
+        assertEq(settings.limitPerEpoch, 2);
     }
 
     function testSendMessage() public {
@@ -43,7 +43,7 @@ contract SendMessageTest is Test {
         mockWID.addMember(idCommitment);
         string memory input = "test message";
         HumanRateLimiter.Settings memory settings = messengerContract.settings();
-        HumanRateLimiter.RateLimitKey memory rateLimitKey = _getRateLimitKey(0, settings.epochLength);
+        HumanRateLimiter.RateLimitKey memory rateLimitKey = _getRateLimitKey(1, settings.epochLength);
         (uint256 nullifierHash, uint256[8] memory proof) = _genProof(rateLimitKey, input);
         messengerContract.sendMessage(
             mockWID.getRoot(),
@@ -56,8 +56,8 @@ contract SendMessageTest is Test {
 
     function _genIdentityCommitment() internal returns (uint256) {
         string[] memory ffiArgs = new string[](2);
-        ffiArgs[0] = 'node';
-        ffiArgs[1] = 'src/test/scripts/generate-commitment.js';
+        ffiArgs[0] = 'ts-node';
+        ffiArgs[1] = 'src/test/scripts/generate-commitment.ts';
 
         bytes memory returnData = vm.ffi(ffiArgs);
         return abi.decode(returnData, (uint256));
@@ -67,14 +67,13 @@ contract SendMessageTest is Test {
             HumanRateLimiter.RateLimitKey memory rateLimitKey,
             string memory message
         ) internal returns (uint256, uint256[8] memory proof) {
-        string[] memory ffiArgs = new string[](7);
-        ffiArgs[0] = 'node';
-        ffiArgs[1] = '--no-warnings';
-        ffiArgs[2] = 'src/test/scripts/generate-proof.js';
-        ffiArgs[3] = rateLimitKey.namespace;
-        ffiArgs[4] = rateLimitKey.epochId.toString();
-        ffiArgs[5] = rateLimitKey.indexId.toString();
-        ffiArgs[6] = message;
+        string[] memory ffiArgs = new string[](6);
+        ffiArgs[0] = 'ts-node';
+        ffiArgs[1] = 'src/test/scripts/generate-proof.ts';
+        ffiArgs[2] = rateLimitKey.namespace;
+        ffiArgs[3] = rateLimitKey.epochId.toString();
+        ffiArgs[4] = rateLimitKey.indexId.toString();
+        ffiArgs[5] = message;
 
         bytes memory returnData = vm.ffi(ffiArgs);
         return abi.decode(returnData, (uint256, uint256[8]));

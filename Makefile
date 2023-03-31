@@ -2,7 +2,7 @@ all: install build
 # Install forge dependencies (not needed if submodules are already initialized).
 install:; forge install && npm install
 # Build contracts and inject the Poseidon library.
-build:; forge build && node ./src/test/scripts/generate-circom-lib.js
+build:; forge build && ts-node ./src/test/scripts/generate-circom-lib.ts
 # Run tests, with debug information and gas reports.
 test:; forge test -vvv --gas-report --ffi
 # Update forge dependencies.

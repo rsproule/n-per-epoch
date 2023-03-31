@@ -44,7 +44,7 @@ contract RateLimitedMessenger is HumanRateLimiter {
         override
         returns (HumanRateLimiter.Settings memory)
     {
-        return Settings(1, 300, 1);
+        return Settings(1, 300, 2);
     }
 
 }
