@@ -80,6 +80,6 @@ Check out `Contract.sol` to see this modifier in action.
 
 - [x] Migrate to foundry. There was some issues with the worldcoin starter code that i didnt want to deal with
 - [ ] small frontend demo?
-- [ ] package this nicely for simple install (`forge install rsproule/this`)
+- [ ] package this nicely for simple install (`forge install rsproule/n-per-epoch`)
 - [ ] migrate the scripts to typescript
 - [ ] how to deploy to production (polygon)
