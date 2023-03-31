@@ -8,6 +8,9 @@
 [worldid-docs]: https://docs.worldcoin.org/
 [semaphore-link]: https://semaphore.appliedzkp.org/
 [erc4337-link]: https://eips.ethereum.org/EIPS/eip-4337/
+[foundry-link]: https://github.com/foundry-rs/foundry
+[hardhat-link]: https://github.com/nomiclabs/hardhat
+[truffle-link]: https://github.com/trufflesuite/truffle
 
 # Privacy Preserving Smart Contract Rate Limiting
 
@@ -20,28 +23,6 @@ Simple contract modifier to add the ability to rate limit humans on any smart co
 <p align="center">
  <img src="assets/logo-n-per-epoch.png" alt="logo">
 </p>
-
-## Install / Build / Test
-
-Install
-
-``` sh
-git clone git@github.com:rsproule/n-per-epoch.git
-```
-
-Build
-
-``` sh
-make 
-```
-
-Run the unit tests:
-
-``` sh
-make test
-```
-
----
 
 ## Rate Limiting?
 
@@ -83,9 +64,21 @@ This example leverages an existing "anonymity set" developed by [Worldcoin][worl
 
 ---
 
-## How to use in your contracts (wip)
+## How to use in your contracts
 
-Check out [`ExampleNPerEpochContract.sol`][local-example-url] to see this modifier in action.
+Install with [Foundry][foundry-link]:
+
+``` sh
+forge install rsproule/n-per-epoch
+```
+
+or install with [Hardhat][hardhat-link] or [Truffle][truffle-link]
+
+``` sh
+npm i https://github.com/rsproule/n-per-epoch
+```
+
+Check out [`ExampleNPerEpochContract.sol`][local-example-url] to see the modifier in action.
 
 ``` ts
 import { NPerEpoch} from "../NPerEpoch.sol";
@@ -126,6 +119,28 @@ function settings()
     return Settings(1, 300, 2); // groupId (worldID=1), epochLength, numPerEpoch)
 }
 ```
+
+## Install / Build / Test
+
+Install
+
+``` sh
+git clone git@github.com:rsproule/n-per-epoch.git
+```
+
+Build
+
+``` sh
+make 
+```
+
+Run the unit tests:
+
+``` sh
+make test
+```
+
+---
 
 ## TODO
 
