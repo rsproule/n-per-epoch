@@ -34,8 +34,24 @@ Other use cases:
 - fair(ish) allocation of scarce resource (nft drop)
 
 ---
+## Install / Build / Test
 
-## How to use (wip)
+Install 
+```
+git clone git@github.com:rsproule/n-per-epoch.git
+```
+
+Build
+```
+make 
+```
+
+Run the unit tests: 
+```
+make test
+```
+--- 
+## How to use in your contracts (wip)
 
 Check out `Contract.sol` to see this modifier in action.
 
