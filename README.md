@@ -1,4 +1,18 @@
+[licence-badge]: https://img.shields.io/github/license/rsproule/n-per-epoch?color=blue
+[licence-url]: https://github.com/rsproule/n-per-epoch/blob/main/LICENSE
+[actions-badge]: https://github.com/rsproule/n-per-epoch/actions/workflows/test.yml/badge.svg
+[actions-url]: https://github.com/rsproule/n-per-epoch/actions/workflows/test.yml
+[twitter-badge]: https://img.shields.io/twitter/follow/sproule_
+[twitter-url]: https://twitter.com/sproule_
+[examples]: https://github.com/rsproule/n-per-epoch/tree/main/examples
+[local-example-url]: src/test/ExampleNPerEpochContract.sol
+[worldid-docs]: https://docs.worldcoin.org/
+
 # Privacy Preserving Smart Contract Rate Limiting
+
+[![MIT licensed][licence-badge]][licence-url]
+[![Build Status][actions-badge]][actions-url]
+[![Twitter][twitter-badge]][twitter-url]
 
 Simple contract modifier to add the ability to rate limit humans on any smart contract function call.
 
@@ -9,7 +23,7 @@ about `address`. This is by design! This means interaction with any of these fun
 
 ## Human?
 
-This example takes advantage of an existing "anonymity set" which was built by the Worldcoin team. This set has
+This example takes advantage of an existing "anonymity set" which was built by [Worldcoin][worldid-docs]. This set has
 approximately 1.4 million _verified_ humans in it. You can opt into using a different set by modifying the groupId
 within the settings.
 
@@ -30,7 +44,7 @@ is allocated to individual users.
 Other use cases:
 
 - faucets: drip assets to Humans but at controlled pace.
-- rewarding user interactions in social networks
+- rewarding user interactions in social networks while limiting the damage of spamming
 - fair(ish) allocation of scarce resource (nft drop)
 
 ---
@@ -59,20 +73,45 @@ make test
 
 ## How to use in your contracts (wip)
 
-Check out `Contract.sol` to see this modifier in action.
+Check out [`ExampleNPerEpochContract.sol`][local-example-url] to see this modifier in action.
 
-```ts
+``` ts
+    import { NPerEpoch} from "../NPerEpoch.sol";
+    ...
+    ...
+    ...
+    constructor(IWorldID _worldId) NPerEpoch(_worldId) {}
+
     function sendMessage(
-        uint256 input,
         uint256 root,
+        string calldata input,
         uint256 nullifierHash,
         uint256[8] calldata proof,
-        RateLimitKey calldata actionId,
-        string calldata message
-    ) public rateLimit(input, root, nullifierHash, actionId, proof) {
+        RateLimitKey calldata actionId
+    )
+        public rateLimit(
+            root, 
+            abi.encodePacked(input).hashToField(), 
+            nullifierHash, 
+            actionId, 
+            proof
+        )
+    {
         if (nullifierHashes[nullifierHash]) revert InvalidNullifier();
         nullifierHashes[nullifierHash] = true;
-        emit Message(message);
+        emit Message(input);
+    }
+    ...
+    ...
+    ...
+    function settings()
+        public
+        pure
+        virtual
+        override
+        returns (NPerEpoch.Settings memory)
+    {
+        return Settings(1, 300, 2);
     }
 ```
 
