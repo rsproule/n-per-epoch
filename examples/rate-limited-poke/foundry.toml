@@ -2,6 +2,7 @@
 src = 'src'
 out = 'out'
 libs = ['lib']
+ffi = true
 
 remappings = [
     "n-per-epoch/=lib/n-per-epoch/src",
