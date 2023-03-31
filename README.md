@@ -6,6 +6,8 @@
 [twitter-url]: https://twitter.com/sproule_
 [local-example-url]: src/test/ExampleNPerEpochContract.sol
 [worldid-docs]: https://docs.worldcoin.org/
+[semaphore-link]: https://semaphore.appliedzkp.org/
+[erc4337-link]: https://eips.ethereum.org/EIPS/eip-4337/
 
 # Privacy Preserving Smart Contract Rate Limiting
 
@@ -14,39 +16,6 @@
 [![Twitter][twitter-badge]][twitter-url]
 
 Simple contract modifier to add the ability to rate limit humans on any smart contract function call.
-
-## Privacy Preserving?
-
-This takes advantage of zero knowledge proof of inclusion. You will notice that this contract does not care at all
-about `address`. This is by design! This means interaction with any of these function can be fully privacy preserving.
-
-## Human?
-
-This example takes advantage of an existing "anonymity set" which was built by [Worldcoin][worldid-docs]. This set has
-approximately 1.4 million _verified_ humans in it. You can opt into using a different set by modifying the groupId
-within the settings.
-
-## Rate Limiting?
-
-This library gives the contract creator the ability to create limits on the number of times that any given user can
-call the function over a provided epoch. This is flexible users can set the epoch to near infinity if they dont want
-the users to get a new set of calls or they can set it super low if they want it to refresh frequently, though because
-proof creating and the settlement on the chain "epochId" needs to match, contract creators should consider proof time and
-the amount of time until the transaction is actually included in a block.
-
-## Why is rate limiting useful?
-
-One obvious example is for a gas sponsoring relay. They may want to provide gas for humans that use their application,
-but they dont want to get completely drained by a single human. This library allows protocols to control how much resource
-is allocated to individual users.
-
-Other use cases:
-
-- faucets: drip assets to Humans but at controlled pace.
-- rewarding user interactions in social networks while limiting the damage of spamming
-- fair(ish) allocation of scarce resource (nft drop)
-
----
 
 ## Install / Build / Test
 
@@ -70,15 +39,51 @@ make test
 
 ---
 
+## Rate Limiting?
+
+This library enables contract creators to set limits on the number of times a specific user can call a function within a defined epoch. The epoch duration is highly flexible, allowing developers to set it to near infinity (1 per forever) or to a very short duration for higher throughput. 
+> **🚨🚨🚨** Be sure to take into account _proof generation time_ and the _block inclusion time_. The "epochId" must match for both proof and settlement on the chain. So _epochLength_ must be greater than the sum of _proof generation time_ and _block inclusion time_ with some buffer.
+
+
+## Privacy Preserving?
+
+You will notice that these contracts do not care at all about `msg.sender`. This is by design! Under the hood, this
+takes advantage of zero knowledge proof of inclusion through the usage of the [semaphore][semaphore-link] library.
+The contract enforces auth via the provided zk proof instead of relying on the signer of the transaction. [ERC4337][erc4337-link]
+style account abstraction could trivially leverage this type of authentication!
+
+## Human?
+
+This example takes advantage of an existing "anonymity set" which was built by [Worldcoin][worldid-docs]. This set has
+approximately 1.4 million _verified_ humans in it. You can opt into using a different set by modifying the groupId
+within the settings.
+
+---
+
+## Why is rate limiting useful?
+
+One obvious example is for a gas sponsoring relay. They may want to provide gas for humans that use their application,
+but they dont want to get completely drained by a single human. This library allows protocols to control how much resource
+is allocated to individual users.
+
+Other use cases:
+
+- __faucets__: Drip assets to humans but at controlled pace.
+- Rewarding user interactions in social networks while limiting the damage of spamming
+- Fair(ish) allocation of scarce resource (nft drop)
+  - ex: each human can mint 1 per hour
+
+---
+
 ## How to use in your contracts (wip)
 
 Check out [`ExampleNPerEpochContract.sol`][local-example-url] to see this modifier in action.
 
 ``` ts
 import { NPerEpoch} from "../NPerEpoch.sol";
-// ...
-// ...
-// ...
+...
+...
+...
 constructor(IWorldID _worldId) NPerEpoch(_worldId) {}
 
 function sendMessage(
@@ -100,9 +105,9 @@ function sendMessage(
     nullifierHashes[nullifierHash] = true;
     emit Message(input);
 }
-// ...
-// ...
-// ...
+...
+...
+...
 function settings()
     public
     pure
@@ -110,7 +115,7 @@ function settings()
     override
     returns (NPerEpoch.Settings memory)
 {
-    return Settings(1, 300, 2);
+    return Settings(1, 300, 2); // groupId (worldID=1), epochLength, numPerEpoch)
 }
 ```
 
