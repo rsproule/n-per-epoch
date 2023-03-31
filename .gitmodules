@@ -4,3 +4,9 @@
 [submodule "lib/world-id-example-airdrop"]
 	path = lib/world-id-example-airdrop
 	url = https://github.com/worldcoin/world-id-example-airdrop
+[submodule "examples/rate-limited-poke/lib/forge-std"]
+	path = examples/rate-limited-poke/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "examples/rate-limited-poke/lib/n-per-epoch"]
+	path = examples/rate-limited-poke/lib/n-per-epoch
+	url = https://github.com/rsproule/n-per-epoch

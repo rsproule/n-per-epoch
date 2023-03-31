@@ -39,8 +39,8 @@ contract InteractsWithWorldID {
 
     function _genIdentityCommitment() internal returns (uint256) {
         string[] memory ffiArgs = new string[](2);
-        ffiArgs[0] = "node";
-        ffiArgs[1] = "src/test/scripts/generate-commitment.js";
+        ffiArgs[0] = "ts-node";
+        ffiArgs[1] = "src/test/scripts/generate-commitment.ts";
 
         bytes memory returnData = wldVM.ffi(ffiArgs);
         return abi.decode(returnData, (uint256));
@@ -52,13 +52,12 @@ contract InteractsWithWorldID {
     {
         // increase the lenght of the array if you have multiple parameters as signal
         string[] memory ffiArgs = new string[](7);
-        ffiArgs[0] = 'node';
-        ffiArgs[1] = '--no-warnings';
-        ffiArgs[2] = 'src/test/scripts/generate-proof.js';
-        ffiArgs[3] = rateLimitKey.namespace;
-        ffiArgs[4] = rateLimitKey.epochId.toString();
-        ffiArgs[5] = rateLimitKey.indexId.toString();
-        ffiArgs[6] = message;
+        ffiArgs[0] = 'ts-node';
+        ffiArgs[1] = 'src/test/scripts/generate-proof.ts';
+        ffiArgs[2] = rateLimitKey.namespace;
+        ffiArgs[3] = rateLimitKey.epochId.toString();
+        ffiArgs[4] = rateLimitKey.indexId.toString();
+        ffiArgs[5] = message;
 
         bytes memory returnData = wldVM.ffi(ffiArgs);
 

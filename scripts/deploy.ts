@@ -23,7 +23,7 @@ if (process.env.PRIVATE_KEY === undefined) {
 if (!validConfig) process.exit(1);
 
 const provider = new JsonRpcProvider(process.env.RPC_URL);
-const wallet = new Wallet(process.env.PRIVATE_KEY, provider);
+const wallet = new Wallet(process.env.PRIVATE_KEY!, provider);
 
 const ask = async (question) => {
   const rl = readline.createInterface({
