@@ -18,7 +18,7 @@
 Simple contract modifier to add the ability to rate limit humans on any smart contract function call.
 
 <p align="center">
- <img src="assets/logo-n-per-epoch.png">
+ <img src="assets/logo-n-per-epoch.png" alt="logo">
 </p>
 
 ## Install / Build / Test
@@ -60,24 +60,26 @@ style account abstraction could trivially leverage this type of authentication!
 
 ## Human?
 
-This example takes advantage of an existing "anonymity set" which was built by [Worldcoin][worldid-docs]. This set has
-approximately 1.4 million _verified_ humans in it. You can opt into using a different set by modifying the groupId
-within the settings.
-
----
+This example leverages an existing "anonymity set" developed by [Worldcoin][worldid-docs], comprising approximately 1.4 million verified human users. Worldcoin established this set by scanning individuals' irises and ensuring that each iris had not been previously added to the set. To utilize a different set, simply modify the groupId within the settings.
 
 ## Why is rate limiting useful?
 
-One obvious example is for a gas sponsoring relay. They may want to provide gas for humans that use their application,
-but they dont want to get completely drained by a single human. This library allows protocols to control how much resource
-is allocated to individual users.
+1. __Prevent abuse__: By limiting the number of requests per user, it helps to prevent abuse of services or resources by malicious actors or bots. This ensures that genuine users have fair access to the system without being crowded out by automated scripts or attacks.
 
-Other use cases:
+1. __Encourage fair distribution__: In scenarios where resources, rewards, or opportunities are limited, rate limiting human users ensures a more equitable distribution. This can help prevent a few users from monopolizing access to valuable assets or services, such as NFT drops or token faucets.
 
-- __faucets__: Drip assets to humans but at controlled pace.
-- Rewarding user interactions in social networks while limiting the damage of spamming
-- Fair(ish) allocation of scarce resource (nft drop)
-  - ex: each human can mint 1 per hour
+1. __Enhance user experience__: When resources are constrained, rate limiting human users can help maintain a smooth and responsive experience for legitimate users. By preventing system overload or resource depletion, it ensures that users can continue to interact with the application without disruption.
+
+1. __Manage costs__: In blockchain applications, rate limiting human users can help manage costs associated with gas fees or other operational expenses. By controlling the frequency of transactions or function calls, service providers can optimize their expenses while still offering a valuable service to users.
+
+1. __Preserve privacy__: By focusing on human users and leveraging privacy-preserving techniques, rate limiting can be implemented without compromising user privacy. This is particularly important in decentralized systems, where trust in the system is often built on the foundation of user privacy and data security.
+
+## Example use-cases
+
+- __Gas-sponsoring relays__: These relays aim to provide gas for human users of their applications while preventing resource depletion by a single user. This library effectively enables protocols to manage resource allocation for individual users.
+- __Faucets__: Distribute assets to human users at a controlled pace, preventing abuse.
+- __Rewarding user interactions on social networks__: Rate limiting helps limit the impact of spamming while still encouraging genuine engagement.
+- __Fair allocation of scarce resources (e.g., NFT drops)__: By implementing rate limiting, each human user could be allowed to mint a specific amount (e.g., one per hour), promoting equitable distribution.
 
 ---
 
@@ -125,7 +127,7 @@ function settings()
 }
 ```
 
-## Todo
+## TODO
 
 - [x] Migrate to foundry. There was some issues with the worldcoin starter code that i didnt want to deal with
 - [x] package this nicely for simple install (`forge install rsproule/n-per-epoch`)
