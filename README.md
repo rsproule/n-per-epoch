@@ -21,7 +21,7 @@
 Simple contract modifier to add the ability to rate limit humans on any smart contract function call.
 
 <p align="center">
- <img src="assets/logo-n-per-epoch-hr.jpg" alt="logo">
+ <img width="50%" src="assets/logo-n-per-epoch-hr.jpg" alt="logo">
 </p>
 
 ## Rate Limiting?
